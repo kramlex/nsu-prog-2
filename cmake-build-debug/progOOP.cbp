@@ -80,10 +80,7 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="C:/Users/markd/CLionProjects/progOOP/2_1.cpp">
-			<Option target="progOOP"/>
-		</Unit>
-		<Unit filename="C:/Users/markd/CLionProjects/progOOP/main.cpp">
+		<Unit filename="C:/Users/markd/CLionProjects/progOOP/1_2.cpp">
 			<Option target="progOOP"/>
 		</Unit>
 		<Unit filename="C:/Users/markd/CLionProjects/progOOP/CMakeLists.txt">

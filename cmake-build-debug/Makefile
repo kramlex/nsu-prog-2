@@ -122,59 +122,32 @@ progOOP/fast:
 	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/build
 .PHONY : progOOP/fast
 
-2_1.obj: 2_1.cpp.obj
+1_2.obj: 1_2.cpp.obj
 
-.PHONY : 2_1.obj
-
-# target to build an object file
-2_1.cpp.obj:
-	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/2_1.cpp.obj
-.PHONY : 2_1.cpp.obj
-
-2_1.i: 2_1.cpp.i
-
-.PHONY : 2_1.i
-
-# target to preprocess a source file
-2_1.cpp.i:
-	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/2_1.cpp.i
-.PHONY : 2_1.cpp.i
-
-2_1.s: 2_1.cpp.s
-
-.PHONY : 2_1.s
-
-# target to generate assembly for a file
-2_1.cpp.s:
-	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/2_1.cpp.s
-.PHONY : 2_1.cpp.s
-
-main.obj: main.cpp.obj
-
-.PHONY : main.obj
+.PHONY : 1_2.obj
 
 # target to build an object file
-main.cpp.obj:
-	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/main.cpp.obj
-.PHONY : main.cpp.obj
+1_2.cpp.obj:
+	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/1_2.cpp.obj
+.PHONY : 1_2.cpp.obj
 
-main.i: main.cpp.i
+1_2.i: 1_2.cpp.i
 
-.PHONY : main.i
+.PHONY : 1_2.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/main.cpp.i
-.PHONY : main.cpp.i
+1_2.cpp.i:
+	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/1_2.cpp.i
+.PHONY : 1_2.cpp.i
 
-main.s: main.cpp.s
+1_2.s: 1_2.cpp.s
 
-.PHONY : main.s
+.PHONY : 1_2.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/main.cpp.s
-.PHONY : main.cpp.s
+1_2.cpp.s:
+	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/1_2.cpp.s
+.PHONY : 1_2.cpp.s
 
 # Help Target
 help:
@@ -185,12 +158,9 @@ help:
 	@echo ... progOOP
 	@echo ... edit_cache
 	@echo ... rebuild_cache
-	@echo ... 2_1.obj
-	@echo ... 2_1.i
-	@echo ... 2_1.s
-	@echo ... main.obj
-	@echo ... main.i
-	@echo ... main.s
+	@echo ... 1_2.obj
+	@echo ... 1_2.i
+	@echo ... 1_2.s
 .PHONY : help
 
 

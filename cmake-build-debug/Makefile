@@ -122,32 +122,32 @@ progOOP/fast:
 	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/build
 .PHONY : progOOP/fast
 
-1_2.obj: 1_2.cpp.obj
+2_1_add.obj: 2_1_add.cpp.obj
 
-.PHONY : 1_2.obj
+.PHONY : 2_1_add.obj
 
 # target to build an object file
-1_2.cpp.obj:
-	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/1_2.cpp.obj
-.PHONY : 1_2.cpp.obj
+2_1_add.cpp.obj:
+	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/2_1_add.cpp.obj
+.PHONY : 2_1_add.cpp.obj
 
-1_2.i: 1_2.cpp.i
+2_1_add.i: 2_1_add.cpp.i
 
-.PHONY : 1_2.i
+.PHONY : 2_1_add.i
 
 # target to preprocess a source file
-1_2.cpp.i:
-	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/1_2.cpp.i
-.PHONY : 1_2.cpp.i
+2_1_add.cpp.i:
+	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/2_1_add.cpp.i
+.PHONY : 2_1_add.cpp.i
 
-1_2.s: 1_2.cpp.s
+2_1_add.s: 2_1_add.cpp.s
 
-.PHONY : 1_2.s
+.PHONY : 2_1_add.s
 
 # target to generate assembly for a file
-1_2.cpp.s:
-	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/1_2.cpp.s
-.PHONY : 1_2.cpp.s
+2_1_add.cpp.s:
+	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/2_1_add.cpp.s
+.PHONY : 2_1_add.cpp.s
 
 # Help Target
 help:
@@ -158,9 +158,9 @@ help:
 	@echo ... progOOP
 	@echo ... edit_cache
 	@echo ... rebuild_cache
-	@echo ... 1_2.obj
-	@echo ... 1_2.i
-	@echo ... 1_2.s
+	@echo ... 2_1_add.obj
+	@echo ... 2_1_add.i
+	@echo ... 2_1_add.s
 .PHONY : help
 
 

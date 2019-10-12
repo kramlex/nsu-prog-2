@@ -4,4 +4,4 @@ project(progOOP)
 set(CMAKE_CXX_STANDARD 14)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++ -static-libgcc -static")
 
-add_executable(progOOP 2_1_add.cpp)
+add_executable(progOOP sc_1.cpp)

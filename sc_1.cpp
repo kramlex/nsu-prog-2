@@ -20,6 +20,10 @@ struct Color{
         Decoded decoded;
         uint32_t encoded;
     };
+    friend std::ostream&operator<<(std::ostream& out , const Color& color){
+        out << "(r: " << (int)color.decoded.red << ", g: " << (int)color.decoded.green << ", b: " << (int)color.decoded.blue << ", alpha: " << (int)color.decoded.alpha << ")" << std::endl;
+        return out;
+    }
 };
 
 uint8_t get_n_byte(uint32_t data, size_t byte_number){
@@ -34,8 +38,10 @@ uint8_t get_n_byte(uint32_t data, size_t byte_number){
 
 int main(){
     Color color;
-    color.decoded = {255,254,253,true, (uint8_t) 100,(uint8_t) 100};
-    std::cout << color.encoded << " " << (int) get_n_byte(color.encoded , 3);
+    color.decoded = {255,254,253,true, 5,3};
+    std::cout << color.encoded << " " << (int) get_n_byte(color.encoded , 3) <<
+    ((color.decoded.blue == get_n_byte(color.encoded , 3)) ? " true" : " false");
+    std::cout << std:: endl << color;
 }
 
 

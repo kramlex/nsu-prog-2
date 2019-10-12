@@ -16,8 +16,6 @@ ifstream fin("input.txt");
 ofstream fout("output.txt");
 
 class MyException : public exception{
-    string s;
-
 public:
     explicit MyException(string ss) : s(std::move(ss)) {}
     ~MyException() noexcept override = default;
@@ -25,17 +23,13 @@ public:
     const char *what() const noexcept override {
         return s.c_str();
     }
+
+private:
+    string s;
 };
 
 enum TokenType {
-    NUMBER,
-    VARIABLE,
-    ADD,
-    SUB,
-    MUL,
-    DIV,
-    L_BRACKET,
-    R_BRACKET
+    NUMBER,VARIABLE,ADD,SUB,MUL,DIV,L_BRACKET,R_BRACKET
 };
 
 struct Token {
@@ -58,11 +52,10 @@ public:
     virtual Expression* simplify() = 0;
     virtual Expression* clone() = 0;
 
-    virtual ~Expression() {};
+    virtual ~Expression() = 0;
 };
 
 class Number : public Expression {
-    double number;
 public:
     Number() : number(0.0) {}
     explicit Number(const double& n){
@@ -92,14 +85,16 @@ public:
     Expression *clone() override {
         return new Number(number);
     }
+
+private:
+    double number;
 };
 
 class Variable : public Expression {
-    char var;
 public:
     Variable() : var('x') {}
     explicit Variable(char const var) : var(var) {}
-    ~Variable() override {}
+    ~Variable() override = default;
 
     void print() override {
         cout << var;
@@ -120,12 +115,12 @@ public:
     Expression *clone() override {
         return new Variable(var);
     }
+
+public:
+    char var;
 };
 
 class Add : public Expression{
-    Expression* left;
-    Expression *right;
-
 public:
     Add(Expression *left, Expression* right) : left(left) , right(right) {}
     ~Add() override {
@@ -193,12 +188,14 @@ public:
     Expression *clone() override {
         return new Add(left->clone(), right->clone());
     }
+
+private:
+    Expression* left;
+    Expression *right;
 };
 
 
 class Mul : public Expression{
-    Expression* left;
-    Expression* right;
 public:
     Mul(Expression* left , Expression* right) : left(left) , right(right) {}
     ~Mul() override{
@@ -273,10 +270,13 @@ public:
     Expression *clone() override {
         return new Mul(left->clone() , right->clone());
     }
+
+private:
+    Expression* left;
+    Expression* right;
 };
 
 class Minus : public Expression {
-    Expression* val;
 public:
     explicit Minus(Expression* expression) : val(expression) {}
 
@@ -318,11 +318,12 @@ public:
     Expression *clone() override {
         return new Minus(val->clone());
     }
+
+private:
+    Expression* val;
 };
 
 class Sub : public Expression{
-    Expression* left;
-    Expression* right;
 public:
     Sub(Expression* left, Expression* right) : left(left) , right(right) {}
     ~Sub() override{
@@ -387,11 +388,13 @@ public:
     Expression *clone() override {
         return new Sub(left->clone(), right->clone());
     }
+
+private:
+    Expression* left;
+    Expression* right;
 };
 
 class Div : public Expression {
-    Expression* left;
-    Expression* right;
 public:
     Div(Expression* left , Expression* right) : left(left) , right(right) {}
     ~Div() override{
@@ -454,6 +457,10 @@ public:
     Expression *clone() override {
         return new Div(left->clone() , right-> clone());
     }
+
+private:
+    Expression* left;
+    Expression* right;
 };
 
 
@@ -463,7 +470,7 @@ void skip_whitespace(string &str , int &pos){
         ++pos;
 }
 
-std::vector<Token> tokenize(string& str) {
+vector<Token> tokenize(string& str) {
     vector<Token> tokens;
     int pos = 0;
     int const length = str.length();
@@ -546,7 +553,7 @@ std::vector<Token> tokenize(string& str) {
     return tokens;
 }
 
-inline int get_precendence(Token token) {
+inline int get_precendence(const Token& token) {
     if (token.type == NUMBER || token.type == VARIABLE) return 0;
     if (token.type == L_BRACKET || token.type == R_BRACKET) return 1;
     if (token.type == ADD || token.type == SUB || token.type == MUL) return 3;
@@ -659,8 +666,6 @@ Expression* parse_expression(string str){
     return build_expression(tokenize(str));
 }
 
-
-
 int main(){
     string str;
     getline(fin , str);
@@ -671,10 +676,6 @@ int main(){
     catch (MyException myException){
         cout << myException.what();
     }
-
-
-//    expression->diff('x')->print(fout);
-
     return 0;
 }
 

@@ -52,7 +52,7 @@ public:
     virtual Expression* simplify() = 0;
     virtual Expression* clone() = 0;
 
-    virtual ~Expression() = 0;
+    virtual ~Expression() = default;
 };
 
 class Number : public Expression {
@@ -671,6 +671,8 @@ int main(){
     getline(fin , str);
     try {
         Expression * expression = parse_expression(str);
+        expression->simplify()->print(fout);
+        fout << endl;
         expression->simplify()->diff('x')->simplify()->print(fout);
     }
     catch (MyException myException){

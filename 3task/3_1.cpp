@@ -29,15 +29,18 @@ public:
 
     void set_next(LinkedHashEntry* _next) { this->next = _next; }
 
+
 protected:
     K key;
     T value;
     LinkedHashEntry* next;
 };
 
+
 template <typename K, typename T>
 class HashTable{
 public:
+
     explicit HashTable(size_t _size , double _ratio) {
         size = _size;
         table.resize(size, nullptr);
@@ -98,7 +101,7 @@ public:
             LinkedHashEntry<K,T>* tmp = table[index];
             while(tmp){
                 if(tmp->get_key() == key){
-                    tmp->set_value(val);
+                      tmp->set_value(val);
                     break;
                 }
                 tmp = tmp->get_next();
@@ -141,7 +144,7 @@ public:
         }
     }
 
-    bool find(K key , T& find_val ){
+    bool find (K key , T& find_val ){
         tr1::hash<K> hash_function;
         size_t index = hash_function(key) % size;
         LinkedHashEntry<K,T>* tmp = table[index];
@@ -155,8 +158,9 @@ public:
         return false;
     }
 
-
+    friend class Iterator;
     class Iterator{
+        friend class HashTable<K,T>;
     public:
         Iterator() : ptr(nullptr) , index(0) {}
         Iterator(LinkedHashEntry<K,T>* _ptr, size_t _index) : ptr(_ptr) , index(_index) {}
@@ -188,23 +192,25 @@ public:
                 return *this;
             }
         }
-        // ?????????????????????????????????????????????
         /*
         Iterator&operator++(){
             if(ptr->get_next())
                 ptr = ptr->get_next();
-            else{
-                for(int i = index+1; i < ; i++){
+                else{
+                for(int i = index+1; i < size; i++){
                     if(table[i]){
                         ptr = table[i];
                         index = i;
-                        break;
+                        return *this;
                     }
                 }
             }
+            ptr = nullptr;
+            index = 0;
             return *this;
         }
-        */
+         */
+
         // ?????????????????????????????????????????????
         LinkedHashEntry<K,T>*operator->(){
             return ptr;
@@ -222,6 +228,7 @@ public:
         size_t index;
     };
 
+
     Iterator begin(){
         for(size_t i = 0; i < size ; i++){
             if(!table[i]) continue;
@@ -237,6 +244,8 @@ public:
     size_t get_used(){
         return used;
     }
+
+    size_t get_size(){ return size; }
 
 private:
     vector<LinkedHashEntry<K,T>*> table;

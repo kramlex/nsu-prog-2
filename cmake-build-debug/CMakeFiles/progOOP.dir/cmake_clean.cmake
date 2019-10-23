@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/progOOP.dir/3task/3_1new.cpp.obj"
+  "CMakeFiles/progOOP.dir/3task/3_1.cpp.obj"
   "libprogOOP.dll.a"
   "progOOP.exe"
   "progOOP.exe.manifest"

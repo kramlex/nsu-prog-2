@@ -56,27 +56,27 @@ include CMakeFiles/progOOP.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/progOOP.dir/flags.make
 
-CMakeFiles/progOOP.dir/3task/3_1new.cpp.obj: CMakeFiles/progOOP.dir/flags.make
-CMakeFiles/progOOP.dir/3task/3_1new.cpp.obj: ../3task/3_1new.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\markd\CLionProjects\progOOP\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/progOOP.dir/3task/3_1new.cpp.obj"
-	C:\PROGRA~2\MINGW-~1\I686-8~1.0-P\mingw32\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\progOOP.dir\3task\3_1new.cpp.obj -c C:\Users\markd\CLionProjects\progOOP\3task\3_1new.cpp
+CMakeFiles/progOOP.dir/3task/3_1.cpp.obj: CMakeFiles/progOOP.dir/flags.make
+CMakeFiles/progOOP.dir/3task/3_1.cpp.obj: ../3task/3_1.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\markd\CLionProjects\progOOP\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/progOOP.dir/3task/3_1.cpp.obj"
+	C:\PROGRA~2\MINGW-~1\I686-8~1.0-P\mingw32\bin\G__~1.EXE  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles\progOOP.dir\3task\3_1.cpp.obj -c C:\Users\markd\CLionProjects\progOOP\3task\3_1.cpp
 
-CMakeFiles/progOOP.dir/3task/3_1new.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/progOOP.dir/3task/3_1new.cpp.i"
-	C:\PROGRA~2\MINGW-~1\I686-8~1.0-P\mingw32\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\markd\CLionProjects\progOOP\3task\3_1new.cpp > CMakeFiles\progOOP.dir\3task\3_1new.cpp.i
+CMakeFiles/progOOP.dir/3task/3_1.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/progOOP.dir/3task/3_1.cpp.i"
+	C:\PROGRA~2\MINGW-~1\I686-8~1.0-P\mingw32\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\markd\CLionProjects\progOOP\3task\3_1.cpp > CMakeFiles\progOOP.dir\3task\3_1.cpp.i
 
-CMakeFiles/progOOP.dir/3task/3_1new.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/progOOP.dir/3task/3_1new.cpp.s"
-	C:\PROGRA~2\MINGW-~1\I686-8~1.0-P\mingw32\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\markd\CLionProjects\progOOP\3task\3_1new.cpp -o CMakeFiles\progOOP.dir\3task\3_1new.cpp.s
+CMakeFiles/progOOP.dir/3task/3_1.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/progOOP.dir/3task/3_1.cpp.s"
+	C:\PROGRA~2\MINGW-~1\I686-8~1.0-P\mingw32\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\markd\CLionProjects\progOOP\3task\3_1.cpp -o CMakeFiles\progOOP.dir\3task\3_1.cpp.s
 
 # Object files for target progOOP
 progOOP_OBJECTS = \
-"CMakeFiles/progOOP.dir/3task/3_1new.cpp.obj"
+"CMakeFiles/progOOP.dir/3task/3_1.cpp.obj"
 
 # External object files for target progOOP
 progOOP_EXTERNAL_OBJECTS =
 
-progOOP.exe: CMakeFiles/progOOP.dir/3task/3_1new.cpp.obj
+progOOP.exe: CMakeFiles/progOOP.dir/3task/3_1.cpp.obj
 progOOP.exe: CMakeFiles/progOOP.dir/build.make
 progOOP.exe: CMakeFiles/progOOP.dir/linklibs.rsp
 progOOP.exe: CMakeFiles/progOOP.dir/objects1.rsp

@@ -5,7 +5,7 @@
 #include <fstream>
 #include <string>
 #include <tr1/functional>
-#include <cmath>
+#include <cassert>
 
 using namespace std;
 
@@ -15,16 +15,12 @@ ofstream fout("output.txt");
 template <typename T>
 class Array {
 public:
-    typedef T* iterator;
-
-    Array() : size(0) , capacity(0) , arr(nullptr) {}
-    Array(size_t newSize , const T& val) : size(newSize) , capacity(newSize*2) , arr(new T[capacity]) {
-        for(size_t i = 0; i != size; ++i)
-            arr[i] = val;
+    Array() : size(0), arr(nullptr) {}
+    Array(size_t newSize , const T& val) : size(newSize), arr(new T[size]) {
+        for(size_t i = 0; i != size; ++i) arr[i] = val;
     }
-    Array(const Array<T>& other) : size(other.size) , capacity(other.capacity) , arr(new T[capacity]) {
-        for(size_t i = 0; i != size; i++)
-            arr[i] = other.arr[i];
+    Array(const Array<T>& other) : size(other.size), arr(new T[size]) {
+        for(size_t i = 0; i != size; i++) arr[i] = other.arr[i];
     }
     ~Array() {
         delete[] arr;
@@ -33,36 +29,36 @@ public:
     size_t get_size() const{
         return size;
     }
-
     void resize(size_t newSize , T val){
-        if(capacity == 0) capacity = 32;
-        while(capacity < newSize)
-            capacity *= 2;
-        T* newArray = new T[capacity];
-        for(size_t i = 0; i != min(size,newSize) ; ++i)
-            newArray[i] = arr[i];
-        for(size_t i = min(size,newSize) ; i != newSize ; ++i)
-            newArray[i] = val;
+        T* newArray = new T[newSize];
+        for(size_t i = 0; i != newSize; ++i)
+            newArray[i] = (i < min(size, newSize) ? arr[i] : val);
         delete[] arr;
-        size = newSize;
-        arr = newArray;
+        arr = newArray; size = newSize;
     }
 
     T &operator[](size_t index){
         return arr[index];
     }
-
-    iterator begin(){
-        return arr;
+    Array<T> &operator=(Array<T> &other){
+        size = other.size;
+        arr = new T[size];
+        for(int i = 0; i < size; i++)
+            arr[i] = other.arr[i];
+        return *this;
     }
 
-    iterator end(){
+    typedef T* iterator;
+    iterator begin() {
+        return arr;
+    }
+    iterator end() {
         return arr + size;
     }
 
-private:
+public:
     T *arr;
-    size_t capacity, size;
+    size_t size;
 };
 
 template <typename K, typename T>
@@ -102,36 +98,56 @@ public:
             }
         }
     }
-
-    bool find(K key){
-        size_t index = get_index(key);
-        LinkedHashEntry<K,T>* ptr = table[index];
-        while(ptr){
-            if(ptr->get_key() == key){
-                lastFound = ptr->get_value();
-                return true;
-            }
-            ptr = ptr->get_next();
+    struct pair{
+    public:
+        pair(LinkedHashEntry<K,T>* _foundPtr , LinkedHashEntry<K,T>* _prevPtr , size_t _index) :
+                foundPtr(_foundPtr ), prevPtr(_prevPtr) , index(_index) {}
+        T getValue() {
+            return foundPtr->get_value();
         }
-        return false;
+        LinkedHashEntry<K,T>* getPtr(){
+            return foundPtr;
+        }
+        LinkedHashEntry<K,T>* getPrev(){
+            return  prevPtr;
+        }
+        bool hasValue(){
+            return foundPtr != nullptr;
+        }
+        size_t getIndex(){
+            return index;
+        }
+    private:
+        LinkedHashEntry<K,T> *foundPtr , *prevPtr;
+        size_t index;
+    };
+
+    pair find(K key){
+        size_t index = get_index(key);
+        if(!table[index])
+            return pair(nullptr , nullptr , 0);
+        LinkedHashEntry<K,T> *ptr = table[index] , *prevPtr = nullptr;
+        if(ptr && ptr->get_next()){
+            prevPtr = ptr; ptr = ptr->get_next();
+        }
+        while(ptr){
+            if(ptr->get_key() == key)
+                return pair(ptr , prevPtr , index);
+            prevPtr = ptr; ptr = ptr->get_next();
+        }
+        return pair(nullptr , nullptr , 0);
     }
 
     void insert(K key, T val){
+        cout << size << " " << used << " " << table.size <<endl;
         size_t index;
-        if(find(key)){
-            index = get_index(key);
-            LinkedHashEntry<K,T>* ptr = table[index];
-            while(ptr){
-                if(ptr->get_key() == key){
-                    ptr->set_value(val);
-                    break;
-                }
-                ptr = ptr->get_next();
-            }
-        }
+        pair found = find(key);
+        if(found.hasValue())
+            found.getPtr()->set_value(val);
         else{
             check_resize();
             index = get_index(key);
+            cout << "lol";
             if(!table[index])
                 table[index] = new LinkedHashEntry<K,T>(key,val);
             else{
@@ -145,30 +161,19 @@ public:
 
     void remove(K key){
         size_t index = get_index(key);
-        if(!table[index]) return;
-        LinkedHashEntry<K,T>* ptr = table[index] , *delPtr;
-        if(ptr->get_key() == key) {
-            delPtr = ptr;
-            table[index] = ptr->get_next();
-            used--;
-            delete delPtr;
-            return;
-        }
-        while(ptr->get_next()){
-            if(ptr->get_next()->get_key() == key){
-                delPtr = ptr->get_next();
-                delete delPtr;
-                used--;
-                return;
-            }
-        }
-
+        pair found = find(key);
+        if(!found.hasValue()) return;
+        if(found.getPrev())
+            found.getPrev()->set_next(found.getPtr()->get_next());
+        if(!found.getPrev())
+            table[found.getIndex()] = found.getPtr()->get_next();
+        delete found.getPtr();
     }
 
     class iterator{
     public:
         iterator(LinkedHashEntry<K,T>* _it , typename Array<LinkedHashEntry<K,T>*>::iterator _arr_it,
-                typename Array<LinkedHashEntry<K,T>*>::iterator _arr_end) : it(_it) , arr_it(_arr_it) , arr_end(_arr_end) {}
+                 typename Array<LinkedHashEntry<K,T>*>::iterator _arr_end) : it(_it) , arr_it(_arr_it) , arr_end(_arr_end) {}
         iterator(const iterator& other) : it(other.it) , arr_it(other.arr_it) , arr_end(other.arr_end) {}
 
         iterator &operator=(const iterator& other){
@@ -225,8 +230,9 @@ public:
             return returned;
         }
 
-    public:
+    private:
         LinkedHashEntry<K,T>* it;
+        LinkedHashEntry<K,T>* prev_it;
         typename Array<LinkedHashEntry<K,T>*>::iterator arr_it;
         typename Array<LinkedHashEntry<K,T>*>::iterator arr_end;
     };
@@ -248,30 +254,41 @@ public:
         return used;
     }
 
+    HashTable<K,T> &operator=(HashTable<K,T> &other){
+        size = other.size;
+        used = other.used;
+        table = other.table;
+        return *this;
+    }
+
 private:
     size_t get_index(K key){
         return hashFunction(key) % size;
     }
 
-    void rehash_list(LinkedHashEntry<K,T> *ptr){
+    void rehash_list(LinkedHashEntry<K,T> *ptr , HashTable<K,T> &newTable){
         LinkedHashEntry<K,T>* delTmp;
         while(ptr){
             delTmp = ptr;
             used--;
-            insert(ptr->get_key() , ptr->get_value());
+            newTable.insert(ptr->get_key() , ptr->get_value());
             ptr = ptr->get_next();
             delete delTmp;
         }
     }
 
     void rehash_table(){
+        cout << endl << "rehash table" << endl;
+        HashTable<K,T> newHashTable(size);
         LinkedHashEntry<K,T> *tmp;
         for(size_t i = 0; i < size/2; i++){
             if(!table[i]) continue;
             tmp = table[i];
             table[i] = nullptr;
-            rehash_list(tmp);
+            rehash_list(tmp , newHashTable);
         }
+        cout << endl << newHashTable.get_used() << "  end rehash table   " << get_used() << endl;
+        *this = newHashTable;
     }
 
     void check_resize(){
@@ -282,12 +299,11 @@ private:
         }
     }
 
-private:
+public:
     Array<LinkedHashEntry<K,T>*> table;
     size_t size,used;
     tr1::hash<K> hashFunction;
     double ratio = 0.75;
-    T lastFound;
 };
 
 template <typename K , typename T>
@@ -312,26 +328,15 @@ void work_with_table(){
                 break;
             }
         }
-        cout << key << " " << value << endl;
     }
     HashTable<T,int> hashTable1(128);
-    for(auto cell : hashTable){
+    for(auto cell : hashTable)
         hashTable1.insert(cell.get_value() , 0);
-    }
-//    ********
-//    for(typename HashTable<K,T>::iterator it = hashTable.begin() ; it != hashTable.end() ; it++){
-//        hashTable1.insert(it->get_value() , 0);
-//    }
-//    OR
-//    for(typename HashTable<K,T>::iterator it = hashTable.begin() ; it != hashTable.end() ; ++it){
-//        hashTable1.insert(it->get_value() , 0);
-//    }
-//    ********
-    fout << hashTable.get_used() << " " << hashTable1.get_used() << endl;
+    fout << hashTable.getUsed() << " " << hashTable1.get_used();
 }
 
 int main(){
-    char type1, type2;
+    /*char type1, type2;
     fin >> type1 >> type2;
     if(type1 == 'I'){
         if(type2 == 'I') work_with_table<int, int>();
@@ -348,5 +353,14 @@ int main(){
         if(type2 == 'D') work_with_table<string, double>();
         if(type2 == 'S') work_with_table<string, string>();
     }
+     */
+
+    HashTable<string, int> hashTable(16);
+    string m = "s";
+    for(int i = 0; i < 60; ++i){
+        hashTable.insert(m , i);
+        m += (i % 2 ? "m" : "s");
+    }
+
     return 0;
 }

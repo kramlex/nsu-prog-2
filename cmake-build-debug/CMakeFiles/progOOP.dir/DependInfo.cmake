@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "C:/Users/markd/CLionProjects/progOOP/3task/3_1.cpp" "C:/Users/markd/CLionProjects/progOOP/cmake-build-debug/CMakeFiles/progOOP.dir/3task/3_1.cpp.obj"
+  "C:/Users/markd/CLionProjects/progOOP/4task/4_1.cpp" "C:/Users/markd/CLionProjects/progOOP/cmake-build-debug/CMakeFiles/progOOP.dir/4task/4_1.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

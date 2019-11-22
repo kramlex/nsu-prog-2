@@ -1,0 +1,49 @@
+(let K = (val 10) in
+ (add
+ (val 5)
+ (var K)))
+
+
+ ***OUTPUT***
+ (val 15)
+
+ ***************************
+ (let A = (val 20) in
+  (let B = (val 30) in
+  (if
+  (var A)
+  (add
+  (var B)
+  (val 3)) then
+  (val 10) else
+  (add
+  (var B)
+  (val 1)))))
+
+***OUTPUT***
+(val 31)
+
+ ***************************
+(let F = (function arg (add (var arg) (val 1))) in
+ (let V = (val -1) in
+ (call (var F) (var V))))
+
+***OUTPUT***
+(val 0)
+
+ ***************************
+(add (var A) (var B))
+
+***OUTPUT***
+ERROR
+
+ ***************************
+(let a = (val 13) in
+    (let F = (function arg (add (var arg) (val 1))) in
+         (block
+              (set a (val 14))
+              (call (var F) (var a)))))
+
+***OUTPUT***
+(val 15)
+

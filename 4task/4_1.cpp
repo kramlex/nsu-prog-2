@@ -5,6 +5,8 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
+#include <set>
+#include <regex>
 
 using namespace std;
 
@@ -66,7 +68,27 @@ private:
     vector<Node*> states;
 };
 
+class NDFA {
+public:
+    class Node {
+        unordered_map<size_t, set<size_t>> transition; // char -> {мн-во всех вершин куда переходит по этой букве}
+        bool final;
+
+        Node(bool final) : final(final) {}
+        bool hasTransition(size_t key){
+            return !transition.empty();
+        }
+    };
+
+
+private:
+    vector<Node*> states;
+    size_t startState;
+    size_t countStates;
+};
+
 int main(){
+    /*
     size_t n,k,f,p;
     fin >> n >> k >> f;
     vector<size_t> finalStates(f);
@@ -90,4 +112,7 @@ int main(){
         fin >> s;
         fout <<  (dfa.has(s) ? "YES" : "NO") << endl;
     }
+     */
+
+
 }

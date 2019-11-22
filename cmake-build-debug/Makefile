@@ -122,32 +122,32 @@ progOOP/fast:
 	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/build
 .PHONY : progOOP/fast
 
-4task/4_1.obj: 4task/4_1.cpp.obj
+4task/4_2.obj: 4task/4_2.cpp.obj
 
-.PHONY : 4task/4_1.obj
+.PHONY : 4task/4_2.obj
 
 # target to build an object file
-4task/4_1.cpp.obj:
-	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/4task/4_1.cpp.obj
-.PHONY : 4task/4_1.cpp.obj
+4task/4_2.cpp.obj:
+	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/4task/4_2.cpp.obj
+.PHONY : 4task/4_2.cpp.obj
 
-4task/4_1.i: 4task/4_1.cpp.i
+4task/4_2.i: 4task/4_2.cpp.i
 
-.PHONY : 4task/4_1.i
+.PHONY : 4task/4_2.i
 
 # target to preprocess a source file
-4task/4_1.cpp.i:
-	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/4task/4_1.cpp.i
-.PHONY : 4task/4_1.cpp.i
+4task/4_2.cpp.i:
+	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/4task/4_2.cpp.i
+.PHONY : 4task/4_2.cpp.i
 
-4task/4_1.s: 4task/4_1.cpp.s
+4task/4_2.s: 4task/4_2.cpp.s
 
-.PHONY : 4task/4_1.s
+.PHONY : 4task/4_2.s
 
 # target to generate assembly for a file
-4task/4_1.cpp.s:
-	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/4task/4_1.cpp.s
-.PHONY : 4task/4_1.cpp.s
+4task/4_2.cpp.s:
+	$(MAKE) -f CMakeFiles\progOOP.dir\build.make CMakeFiles/progOOP.dir/4task/4_2.cpp.s
+.PHONY : 4task/4_2.cpp.s
 
 # Help Target
 help:
@@ -158,9 +158,9 @@ help:
 	@echo ... progOOP
 	@echo ... edit_cache
 	@echo ... rebuild_cache
-	@echo ... 4task/4_1.obj
-	@echo ... 4task/4_1.i
-	@echo ... 4task/4_1.s
+	@echo ... 4task/4_2.obj
+	@echo ... 4task/4_2.i
+	@echo ... 4task/4_2.s
 .PHONY : help
 
 

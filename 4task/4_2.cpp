@@ -682,7 +682,7 @@ private:
 class ClosureExpression : public FunctionExpression {
 public:
     ClosureExpression(FunctionExpression *func, Scope *scope)
-    : FunctionExpression(func->GetId(), func->GetBody()->Clone()), scope(scope) {}
+            : FunctionExpression(func->GetId(), func->GetBody()->Clone()), scope(scope) {}
 
     Scope *GetScope() {
         return scope;

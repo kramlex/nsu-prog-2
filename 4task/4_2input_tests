@@ -7,7 +7,7 @@
  ***OUTPUT***
  (val 15)
 
- ***************************
+####################################
  (let A = (val 20) in
   (let B = (val 30) in
   (if
@@ -23,7 +23,7 @@
 ***OUTPUT***
 (val 31)
 
- ***************************
+####################################
 (let F = (function arg (add (var arg) (val 1))) in
  (let V = (val -1) in
  (call (var F) (var V))))
@@ -31,19 +31,123 @@
 ***OUTPUT***
 (val 0)
 
- ***************************
+####################################
 (add (var A) (var B))
 
 ***OUTPUT***
 ERROR
 
- ***************************
+####################################
 (let a = (val 13) in
-    (let F = (function arg (add (var arg) (val 1))) in
+    (let F = (function arg (add (var arg) (val 1)) ) in
          (block
               (set a (val 14))
-              (call (var F) (var a)))))
+              (call (var F) (var a))
+         )
+    )
+)
 
 ***OUTPUT***
 (val 15)
+
+####################################
+# FIBONACHI #
+(let N = (val 7) in
+    (let F = ( function n
+                (if (val 2) (var n) then
+                    (var n)
+                    else
+                    (add
+                        (call (var F) (add (val -1) (var n)))
+                        (call (var F) (add (val -2) (var n)))
+                    )
+                )
+              )
+    in (call (var F) (var N))
+    )
+)
+
+***OUTPUT***
+(val 13)
+
+####################################
+https://inf-ege.sdamgia.ru/problem?id=9797
+
+( let F = (val 1)
+    in (let G = (val 2)
+        in (block
+                (set F (function arg
+                    (if (var arg) (val 2) then
+                        (add
+                            (call (var F) (add (var arg) (val -1)))
+                            (call (var G) (add (var arg) (val -2)))
+                        )
+                    else
+                        (val 1)
+                    )
+                 )  )
+                (set G (function arg
+                    (if (var arg) (val 2) then
+                        (add
+                            (call (var G) (add (var arg) (val -1)))
+                            (call (var F) (add (var arg) (val -2)))
+                        )
+                    else
+                        (val 1)
+                    )
+                )  )
+                (call (var F) (val 8))
+       )
+)
+)
+
+*** OUTPUT***
+(val 21)
+
+####################################
+Sum in range[0,9]
+
+(let R = (val 0) in
+    (let N = (val 10) in
+        (let i = (val 0) in
+            (let step = (function arg
+                (if (var N) (var i)  then
+                    (block
+                        (set R (add (var R) (var i)))
+                        (set i (add (var i) (val 1)))
+                        (call (var step) (val 0))
+                    )
+                    else
+                        (val 0)
+                )
+                ) in
+                (block
+                    (call (var step) (val 0))
+                    (var R)
+                )
+            )
+        )
+    )
+)
+
+***OUTPUT***
+(val 45)
+
+####################################
+Lexical scope test
+
+(let a = (val 4) in
+    (let bar = (function arg (set a (var arg))) in
+        (let foo = (function arg
+            (block
+                (call (var bar) (val 228))
+                (var a)
+            )) in (call (var foo) (val 337)))))
+
+***OUTPUT***
+(val 228)
+
+
+
+
 

@@ -19,7 +19,7 @@ string downloadRepository = "C:\\crawler\\";
 
 class Crawler {
 public:
-    Crawler(int count, string input) : countThreads(count) {
+    Crawler(int count, string input) : countThreads(count), startPath(input){
         toProcessed.push(input);
         processed.insert(input);
     }
@@ -53,66 +53,70 @@ public:
             return nextFile;
         }
         else
-            return "-0";
+            return "not";
     }
 
     void ThreadProcessFile(string file) {
-        try {
-            ifstream in(file);
-            ThreadCopyFile(file);
-            string line;
-            char c;
-            vector<string> hrefs;
-
-            while (in) {
-                line.clear();
-                c = in.get();
-                if(c == '<' && in.get() == 'a' ) {
-                    while(c != '\"') {
-                        c = in.get();
-                    }
-                    c = in.get();
-                    while(c != '\"') {
-                        line += c;
-                        c = in.get();
-                    }
-//                    cout << line << endl;
-                    hrefs.push_back(line.substr(7));
-                }
-                // line = "file://...."
-            }
-            for(auto i : hrefs) {
-                ThreadNewFileAdd(i);
-            }
-            ThreadAddDoneFile(file);
+        if(processed.find(file) != processed.end() && file != startPath){
+            return;
         }
-        catch (...) { }
+        ifstream in(file);
+        ThreadCopyFile(file);
+        string line;
+        char c;
+        vector<string> hrefs;
+
+        while (in) {
+            line.clear();
+            c = in.get();
+            if(c == '<' && in.get() == 'a' ) {
+                while(c != '\"') {
+                    c = in.get();
+                }
+                c = in.get();
+                while(c != '\"') {
+                    line += c;
+                    c = in.get();
+                }
+                hrefs.push_back(line.substr(7));
+            }
+            // line = "file://...."
+        }
+        for(auto i : hrefs) {
+            ThreadNewFileAdd(i);
+        }
+        ThreadAddDoneFile(file);
+
     }
 
     void ThreadProgram () {
         while (!toProcessed.empty() || workingThreads != 0) {
             if (!toProcessed.empty()) {
                 string file = ThreadGetNewFile();
-                if (file != "-0") {
+                if (file != "not") {
                     workingThreads++;
                     ThreadProcessFile(file);
                     workingThreads--;
                 }
             }
-            cout << toProcessed.size() << " " << workingThreads << endl;
+            cout << processed.size() << endl;
         }
+        cout << "Thread id = " <<  this_thread::get_id() << " end!" << endl;
     }
 
     pair<int, int> crawl() {
+        cout << "Num of Threads = " << countThreads << endl;
+        this_thread::sleep_for(chrono::milliseconds(2000));
+
         pair<int, int> result;
         chrono::time_point<chrono::system_clock> start, end;
         start = chrono::system_clock::now();
 
-        for(int i = 0; i < countThreads; ++i){
+        workingThreads = 0;
+        for(int i = 0; i < countThreads; ++i)
             threads.push_back(thread(&Crawler::ThreadProgram, ref(*this)));
-        }
         for(int i = 0; i < countThreads; ++i) {
-            threads.at(i).join();
+            threads[i].join();
         }
 
         end = chrono::system_clock::now();
@@ -137,14 +141,14 @@ private:
 int main(){
     ifstream fin("input.txt");
     string inp;
-    int numOfThreads;
-    fin >> inp >> numOfThreads;
+    int numThreads;
+    fin >> inp >> numThreads;
     fin.close();
 
-    Crawler crawler(numOfThreads, inp);
+    Crawler crawler(numThreads, inp);
     pair<int, int> result = crawler.crawl();
-    ofstream out("output.txt");
-    out << result.first << " " << result.second << " microsec";
-    out.close();
+    ofstream fout("output.txt");
+    fout << result.first << " " << result.second << " microsec";
+    fout.close();
     return 0;
 }

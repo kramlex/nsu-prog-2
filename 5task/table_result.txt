@@ -1,0 +1,11 @@
+Input:
+42.html
+
+Threads:
+1 -> 11878592 microsec
+2 -> 5759407 microsec
+3 -> 4704214 microsec
+4 -> 4348268 microsec
+5 -> 4190295 microsec
+6 -> 4503178 microsec
+7 -> 5069367 microsec

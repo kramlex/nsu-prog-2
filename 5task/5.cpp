@@ -56,7 +56,6 @@ public:
     }
 
     void ThreadProcessFile(string file) {
-        lock_guard<mutex> lockGuard(contLock);
         if(processed.find(file) != processed.end() && file != startPath){
             return;
         }
@@ -90,7 +89,6 @@ public:
     }
 
     void ThreadProgram () {
-        lock_guard<mutex> lockGuard(contLock);
         while (!toProcessed.empty() || workingThreads != 0) {
             if (!toProcessed.empty()) {
                 auto file = ThreadGetNewFile();

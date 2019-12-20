@@ -45,18 +45,18 @@ public:
         lock_guard<mutex> lockGuard(contLock);
         processed.insert(filename);
     }
-    string ThreadGetNewFile() {
+    pair<bool, string> ThreadGetNewFile() {
         lock_guard<mutex> guard(contLock);
         if(!toProcessed.empty()) {
             string nextFile = toProcessed.front();
             toProcessed.pop();
-            return nextFile;
+            return make_pair(true, nextFile);
         }
-        else
-            return "not";
+        return make_pair(false, "");
     }
 
     void ThreadProcessFile(string file) {
+        lock_guard<mutex> lockGuard(contLock);
         if(processed.find(file) != processed.end() && file != startPath){
             return;
         }
@@ -78,9 +78,9 @@ public:
                     line += c;
                     c = in.get();
                 }
+                // line = "file://...."
                 hrefs.push_back(line.substr(7));
             }
-            // line = "file://...."
         }
         for(auto i : hrefs) {
             ThreadNewFileAdd(i);
@@ -90,12 +90,13 @@ public:
     }
 
     void ThreadProgram () {
+        lock_guard<mutex> lockGuard(contLock);
         while (!toProcessed.empty() || workingThreads != 0) {
             if (!toProcessed.empty()) {
-                string file = ThreadGetNewFile();
-                if (file != "not") {
+                auto file = ThreadGetNewFile();
+                if (file.first) {
                     workingThreads++;
-                    ThreadProcessFile(file);
+                    ThreadProcessFile(file.second);
                     workingThreads--;
                 }
             }

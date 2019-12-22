@@ -90,17 +90,16 @@ public:
 
     void ThreadProgram () {
         while (!toProcessed.empty() || workingThreads != 0) {
-            if (!toProcessed.empty()) {
-                auto file = ThreadGetNewFile();
-                if (file.first) {
-                    workingThreads++;
-                    ThreadProcessFile(file.second);
-                    workingThreads--;
-                }
+            auto file = ThreadGetNewFile();
+            if (file.first) {
+                workingThreads++;
+                ThreadProcessFile(file.second);
+                workingThreads--;
             }
             cout << processed.size() << endl;
         }
         cout << "Thread id = " <<  this_thread::get_id() << " end!" << endl;
+
     }
 
     pair<int, int> crawl() {

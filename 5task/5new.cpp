@@ -98,7 +98,7 @@ public:
             if(file.first){
                 ThreadProcessFile(file.second);
                 endedTasks++;
-                if(endedTasks.load() && allStartTasks.load() && equal)
+                if(endedTasks.load() != 0 && allStartTasks.load() && equal)
                     equal = false;
             }
             cout << processed.size() << " " << allStartTasks.load() << " " << endedTasks.load()     << endl;

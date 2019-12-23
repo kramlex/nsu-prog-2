@@ -26,7 +26,6 @@ public:
 
     void ThreadNewFileAdd (string href){
         lock_guard<mutex> lockGuard(contLock);
-
         if(processed.find(href) == processed.end()){
             allStartTasks++;
             toProcessed.push(href);
@@ -70,13 +69,12 @@ public:
         char c;
         vector<string> hrefs;
 
-        while (in) {
+        while(in) {
             line.clear();
             c = in.get();
             if(c == '<' && in.get() == 'a' ) {
-                while(c != '\"') {
+                while(c != '\"')
                     c = in.get();
-                }
                 c = in.get();
                 while(c != '\"') {
                     line += c;
@@ -86,11 +84,9 @@ public:
                 hrefs.push_back(line.substr(7));
             }
         }
-        for(auto i : hrefs) {
+        for(auto i : hrefs)
             ThreadNewFileAdd(i);
-        }
         ThreadAddDoneFile(file);
-
     }
 
     void ThreadProgram() {
@@ -108,7 +104,6 @@ public:
                 cout << processed.size() << " " << allStartTasks.load() << " " << endedTasks.load() << endl;
             }
         } while(!equal);
-
         cout << "Thread id = " <<  this_thread::get_id() << " end!" << endl;
     }
 
@@ -132,7 +127,6 @@ public:
         int time = chrono::duration_cast<chrono::microseconds>(end - start).count();
         result.second = time;
         result.first = processed.size();
-
         return result;
     }
 

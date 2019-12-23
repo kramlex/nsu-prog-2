@@ -58,8 +58,11 @@ public:
     }
 
     void ThreadProcessFile(string file) {
-        if(processed.find(file) != processed.end() && file != startPath){
-            return;
+        {
+            lock_guard<mutex> lockGuard(contLock);
+            if(processed.find(file) != processed.end() && file != startPath){
+                return;
+            }
         }
         ifstream in(file);
         ThreadCopyFile(file);
@@ -98,15 +101,15 @@ public:
             if(file.first){
                 ThreadProcessFile(file.second);
                 endedTasks++;
-                if(endedTasks.load() != 0 && allStartTasks.load() && equal)
-                    equal = false;
+                equal = false;
             }
-            cout << processed.size() << " " << allStartTasks.load() << " " << endedTasks.load()     << endl;
+            {
+                lock_guard<mutex> lockGuard(contLock);
+                cout << processed.size() << " " << allStartTasks.load() << " " << endedTasks.load() << endl;
+            }
         } while(!equal);
 
-
         cout << "Thread id = " <<  this_thread::get_id() << " end!" << endl;
-
     }
 
     pair<int, int> crawl() {

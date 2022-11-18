@@ -1,35 +1,34 @@
 //
-// Created by markd on 23.11.2019.
+// Created by markd on 23.11.2019. Edited by Clonexy on 31.10.2022
 //
 #include <string>
 #include <list>
-#include <vector>
 #include <unordered_map>
+#include <vector>
+#include <utility>
 #include <fstream>
 #include <iostream>
-#include <algorithm>
 #include <stack>
+#include <algorithm>
 #include <exception>
 
 using namespace std;
 
-// My Exception
 class MyException : public exception{
     string s;
 
 public:
-    explicit MyException(string ss) : s(move(ss)) {}
+    explicit MyException(string ss) : s(std::move(ss)) {}
     ~MyException() noexcept override = default;
 
     const char *what() const noexcept override {
-        return s.c_str();
+            return s.c_str();
     }
 };
 
-// Tokens
 class Token {
 public:
-    Token() {}
+    Token() = default;
     virtual ~Token() = default;
 };
 
@@ -39,7 +38,7 @@ class AssignOperatorToken : public Token {};
 class KeywordToken : public Token {
 public:
     KeywordToken(const KeywordToken &keyword) : keyword(keyword.keyword) {}
-    KeywordToken(string str) : keyword(str) {}
+    explicit KeywordToken(string str) : keyword(std::move(str)) {}
 
     string& GetKeyword() {
         return keyword;
@@ -52,7 +51,7 @@ private:
 class IdentifierToken : public Token {
 public:
     IdentifierToken(const IdentifierToken &id) : id(id.id) {}
-    IdentifierToken(string id) : id(id) {}
+    explicit IdentifierToken(string id) : id(std::move(id)) {}
 
     string& GetId() {
         return id;
@@ -65,17 +64,15 @@ private:
 class ValueToken : public Token {
 public:
     ValueToken(const ValueToken &val) : value(val.value) {}
-    ValueToken(int value) : value(value) {}
+    explicit ValueToken(int value) : value(value) {}
 
-    int GetValue() {
+    int GetValue() const {
         return value;
     }
 
 private:
     int value;
 };
-
-// Lexer and Tokenize
 
 const char OPEN_BRACKET = '(';
 const char CLOSE_BRACKET = ')';
@@ -179,7 +176,7 @@ protected:
     }
 
     ValueToken *CreateValueToken() {
-        ValueToken *token = new ValueToken(stoi(buff));
+        auto *token = new ValueToken(stoi(buff));
         buff = "";
         return token;
     }
@@ -199,11 +196,9 @@ private:
     string buff;
 };
 
-// Abstract Syntax Tree
-
 class Expression {
 public:
-    Expression() {}
+    Expression() = default;
     virtual ~Expression() = default;
     virtual Expression *Clone() {
         return new Expression();
@@ -215,14 +210,14 @@ public:
 
 class ValExpression : public Expression {
 public:
-    ValExpression(int val) : value(val) {};
+    explicit ValExpression(int val) : value(val) {};
     int GetValue() const {
         return value;
     }
-    virtual Expression *Clone() {
+    Expression *Clone() override {
         return (Expression*) new ValExpression(value);
     }
-    virtual string ToString() {
+    string ToString() override {
         return "(val " + to_string(value) + ")";
     }
 private:
@@ -231,7 +226,7 @@ private:
 
 class VarExpression : public Expression {
 public:
-    VarExpression(string &str) : id(str) {};
+    explicit VarExpression(string &str) : id(str) {};
     string GetId() const {
         return id;
     }
@@ -251,7 +246,7 @@ private:
 class AddExpression : public Expression {
 public:
     AddExpression(Expression *left, Expression *right) : left(left), right(right) {};
-    ~AddExpression() {
+    ~AddExpression() override {
         delete left; delete right;
     }
 
@@ -263,11 +258,11 @@ public:
         return right;
     }
 
-    virtual Expression *Clone() {
+    Expression *Clone() override {
         return (Expression*) new AddExpression(left->Clone(), right->Clone());
     }
 
-    virtual string ToString() {
+    string ToString() override {
         return "(add " + left->ToString() + " " + right->ToString() + ")";
     }
 private:
@@ -279,7 +274,7 @@ class IfExpression : public Expression {
 public:
     IfExpression(Expression *left, Expression *right, Expression *thenBranch, Expression *elseBranch) :
             left(left), right(right), thenBranch(thenBranch), elseBranch(elseBranch) {};
-    ~IfExpression() {
+    ~IfExpression() override {
         delete left;
         delete right;
         delete thenBranch;
@@ -324,9 +319,9 @@ private:
 
 class LetExpression : public Expression {
 public:
-    LetExpression(const string &id, Expression *expression, Expression *body) :
-            id(id), expression(expression), body(body) {};
-    ~LetExpression() {
+    LetExpression(string id, Expression *expression, Expression *body) :
+            id(std::move(id)), expression(expression), body(body) {};
+    ~LetExpression() override {
         delete expression;
         delete body;
     }
@@ -359,8 +354,8 @@ private:
 
 class FunctionExpression : public Expression {
 public:
-    FunctionExpression(const string &id, Expression *body) : id(id), body(body) {};
-    ~FunctionExpression() {
+    FunctionExpression(string id, Expression *body) : id(std::move(id)), body(body) {};
+    ~FunctionExpression() override {
         delete body;
     }
 
@@ -388,7 +383,7 @@ private:
 class CallExpression : public Expression {
 public:
     CallExpression(Expression *callable, Expression *argument) : callable(callable), argument(argument) {};
-    ~CallExpression() {
+    ~CallExpression() override {
         delete callable; delete argument;
     }
 
@@ -418,7 +413,7 @@ public:
     void AddExpression(Expression *expression) {
         expressions.push_back(expression);
     }
-    ~BlockExpression() {
+    ~BlockExpression() override {
         auto it = expressions.begin();
         while (it != expressions.end()){
             delete *it;
@@ -452,9 +447,9 @@ private:
 
 class SetExpression : public Expression {
 public:
-    SetExpression(const string &id, Expression *expression) :
-            id(id), expression(expression) {};
-    ~SetExpression() {
+    SetExpression(string id, Expression *expression) :
+            id(std::move(id)), expression(expression) {};
+    ~SetExpression() override {
         delete expression;
     }
 
@@ -479,11 +474,9 @@ private:
     Expression *expression;
 };
 
-// Parser
-
 class Parser {
 public:
-    Parser(list<Token*> &tokens) {
+    explicit Parser(list<Token*> &tokens) {
         it = tokens.begin();
         end = tokens.end();
     }
@@ -492,7 +485,6 @@ public:
         return ParseExpression();
     }
 
-    // Recursive descent parser
     Expression *ParseExpression() {
         static_cast<void>(GetToken<OpenBracketToken>());
         auto keyword = GetToken<KeywordToken>();
@@ -568,7 +560,7 @@ protected:
 
         } while (true);
 
-        if(expr->GetExpressions().size() == 0){
+        if(expr->GetExpressions().empty()){
             delete expr;
             throw MyException("Block epxression should have one nested expression at least");
         }
@@ -629,15 +621,14 @@ private:
     list<Token*>::iterator end;
 };
 
-// Scope
 class Scope{
 public:
     Scope() = default;
-    Scope(Scope *parent) : parentScope(parent) {}
+    explicit Scope(Scope *parent) : parentScope(parent) {}
     ~Scope() {
-        for (auto p : values){
+        for (const auto& p : values){
             auto expr = p.second;
-            if(expr) delete expr;
+            delete expr;
         }
     }
     const Expression *GetValue(const string &key) {
@@ -645,7 +636,6 @@ public:
     }
 
     void AddValue(const string &key, Expression *value) {
-//        values.insert(pair<const string, Expression*>(key, value));
         values.insert({key,value});
     }
 
@@ -678,7 +668,6 @@ private:
     unordered_map<string, Expression*> values;
 };
 
-// Closure scope
 class ClosureExpression : public FunctionExpression {
 public:
     ClosureExpression(FunctionExpression *func, Scope *scope)
@@ -771,7 +760,7 @@ protected:
     Expression *Eval(LetExpression *expr) {
         auto id = expr->GetId();
         auto value = Eval(expr->GetExpression());
-        Scope *scope = new Scope(CurrentScope());
+        auto *scope = new Scope(CurrentScope());
         PushScope(scope);
         scope->AddValue(id, value);
         auto result = Eval(expr->GetBody());
@@ -793,7 +782,7 @@ protected:
         auto argument = Eval(expr->GetArgument());
 
         Scope *parentScope = closure ? closure->GetScope() : CurrentScope();
-        Scope *scope = new Scope(parentScope);
+        auto *scope = new Scope(parentScope);
         scope->AddValue(called->GetId(), argument);
         PushScope(scope);
 
@@ -869,10 +858,6 @@ int main(){
 
         VM vm;
         auto expression = vm.Eval(AST);
-
-        if(dynamic_cast<ValExpression*>(expression) == nullptr){
-            throw MyException("Wrong expression type");
-        }
         fout << expression->ToString();
         delete AST;
         delete expression;
